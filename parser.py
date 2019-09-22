@@ -1,4 +1,4 @@
-import sys
+import sys, os
 import pandas as pd
 import re
 import requests
@@ -54,7 +54,8 @@ def get_project_info(line):
         num_stars = -1
         if repo_owner != '' and repo_name != '':
             # get other repo info using github api
-            headers = {'Authorization': 'bearer a0855061d84c3346f875b6be6baa293849da7b49'}
+
+            headers = {'Authorization': 'bearer '+os.environ['GITHUB_AWESOME_PARSER_TOKEN']}
             query_str = 'query { repository(owner: "%s", name: "%s") { stargazers { totalCount } } rateLimit {limit cost remaining resetAt}}' % (repo_owner, repo_name)
             payload = {'query' : query_str}
             resp = requests.post('https://api.github.com/graphql', json = payload, headers = headers)
